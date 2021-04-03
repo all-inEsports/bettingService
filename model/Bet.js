@@ -44,6 +44,9 @@ const BetSchema = new Schema({
     IsInProgress: {
         type: Boolean,
         required :true
+    },
+    AmountWon: {
+        type: Number,
     }
 });
 

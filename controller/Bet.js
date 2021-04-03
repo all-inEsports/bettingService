@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 module.exports = () => {
  
         const Bet = require("../model/Bet");
+        const Transaction = require("../controller/Transaction");
         return {
             addNewBet : (data) => {
                 return new Promise((resolve, reject) => {
@@ -20,11 +21,17 @@ module.exports = () => {
             },
             resolveBet : (data,id) => {
                 return new Promise((resolve, reject) => {
+                  console.log(data);
                     Bet.updateOne({ _id: id },  {
                         $set: data,
                       })
                       .exec()
                       .then((Bet) => {
+                        if(data.IsWin && data.AmountWon)
+                        {
+                          let transaction = new Transaction(data.UserName,data.AmountWon,"CREDIT",`Bet ${id} Won ${data.AmountWon}`);
+                          Transaction.addNewTransaction(transaction);
+                        }
                         resolve(`Bet updated for ${data.UserName}`);
                       })
                       .catch((err) => {
