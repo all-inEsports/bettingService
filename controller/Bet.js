@@ -27,7 +27,7 @@ module.exports = () => {
                       })
                       .exec()
                       .then((Bet) => {
-                        if(data.IsWin && data.AmountWon)
+                        if(data.IsWin && data.AmountWon && data.IsInProgress)
                         {
                           let transaction = new Transaction(data.UserName,data.AmountWon,"CREDIT",`Bet ${id} Won ${data.AmountWon}`);
                           Transaction.addNewTransaction(transaction);
