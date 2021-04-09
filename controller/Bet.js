@@ -22,17 +22,18 @@ module.exports = () => {
             resolveBet : (data,id) => {
                 return new Promise((resolve, reject) => {
                   console.log(data);
+                  if(data.IsWin && data.AmountWon && data.IsInProgress)
+                  {
+                    let transaction = new Transaction(data.UserName,data.AmountWon,"CREDIT",`Bet ${id} Won ${data.AmountWon}`);
+                    Transaction.addNewTransaction(transaction);
+                  }
                   data.IsInProgress = false;
                     Bet.updateOne({ _id: id },  {
                         $set: data,
                       })
                       .exec()
                       .then((Bet) => {
-                        if(data.IsWin && data.AmountWon)
-                        {
-                          let transaction = new Transaction(data.UserName,data.AmountWon,"CREDIT",`Bet ${id} Won ${data.AmountWon}`);
-                          Transaction.addNewTransaction(transaction);
-                        }
+                      
                         
                         resolve(`Bet updated for ${data.UserName}`);
                       })
