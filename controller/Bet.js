@@ -27,12 +27,12 @@ module.exports = () => {
                       })
                       .exec()
                       .then((Bet) => {
-                        if(data.IsWin && data.AmountWon && data.IsInProgress)
+                        if(data.IsWin && data.AmountWon)
                         {
-                          data.IsInProgress = false;
                           let transaction = new Transaction(data.UserName,data.AmountWon,"CREDIT",`Bet ${id} Won ${data.AmountWon}`);
                           Transaction.addNewTransaction(transaction);
                         }
+                        data.IsInProgress = false;
                         resolve(`Bet updated for ${data.UserName}`);
                       })
                       .catch((err) => {
