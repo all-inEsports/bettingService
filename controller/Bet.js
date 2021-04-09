@@ -22,6 +22,7 @@ module.exports = () => {
             resolveBet : (data,id) => {
                 return new Promise((resolve, reject) => {
                   console.log(data);
+                  data.IsInProgress = false;
                     Bet.updateOne({ _id: id },  {
                         $set: data,
                       })
@@ -32,7 +33,7 @@ module.exports = () => {
                           let transaction = new Transaction(data.UserName,data.AmountWon,"CREDIT",`Bet ${id} Won ${data.AmountWon}`);
                           Transaction.addNewTransaction(transaction);
                         }
-                        data.IsInProgress = false;
+                        
                         resolve(`Bet updated for ${data.UserName}`);
                       })
                       .catch((err) => {
