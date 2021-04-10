@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 const BetController = require("./controller/Bet")();
 const bodyParser = require("body-parser");
 const boolParser = require("express-query-boolean");
+const Notification= require("./controller/Notification");
 
 var jwtOptions = {};
 
@@ -72,6 +73,19 @@ app.post("/v1/bet", (req, res) => BetController.addNewBet(req.body).then((msg) =
     }
   
   });
+
+app.get("/v1/notifications/:username", (req, res) => {
+  Notification.getAllNotificationForUser(req.params.username).then((list) => res.status(200).json(list)).catch(e => res.status(404).json(e))
+})
+
+app.put("/v1/resolve/notification/:id",(req, res) => {
+  Notification.resolveNotification(req.params.id,req.body).then((msg) => {
+    res.json({ message: msg });
+  })
+    .catch((err) => {
+      res.json({ message: `an error occurred: ${err}` });
+    })
+})
   
   // Connection to db and defines User model
   const connect = (mongoDBConnectionString) => {

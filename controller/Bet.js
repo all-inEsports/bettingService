@@ -4,6 +4,7 @@ module.exports = () => {
  
         const Bet = require("../model/Bet");
         const Transaction = require("../controller/Transaction");
+        const Notification = require("../controller/Notification");
         return {
             addNewBet : (data) => {
                 return new Promise((resolve, reject) => {
@@ -26,6 +27,12 @@ module.exports = () => {
                   {
                     let transaction = new Transaction(data.UserName,data.AmountWon,"CREDIT",`Bet ${id} Won ${data.AmountWon}`);
                     Transaction.addNewTransaction(transaction);
+                    let notification = new Notification.Notify(data.UserName,data.MatchId,data.IsWin,data.AmountWon);
+                    Notification.addNewNotification(notification);
+                  }else if(data.IsInProgress && !data.IsWin)
+                  {
+                    let notification = new Notification.Notify(data.UserName,data.MatchId,data.IsWin,0);
+                    Notification.addNewNotification(notification);
                   }
                   data.IsInProgress = false;
                     Bet.updateOne({ _id: id },  {
